@@ -1,12 +1,10 @@
 import "../app.css";
-import Counter from "../components/Counter.svelte";
+import Welcome from "../components/Welcome.svelte";
 
 const target = document.getElementById("app");
 
 async function render() {
-  const { count } = await chrome.storage.sync.get({ count: 0 });
-
-  new Counter({ target, props: { count } });
+  new Welcome({ target });
 }
 
 document.addEventListener("DOMContentLoaded", render);
