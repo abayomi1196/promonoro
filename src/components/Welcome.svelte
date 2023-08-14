@@ -1,27 +1,38 @@
 <script lang="ts">
   import { formatTimeLeft } from "../utils";
 
-  const TIME_LIMIT = 1500; //25 mins
+  const TIME_LIMIT = 5; //25 mins -> 1500
 
   let timerStarted = false;
   let timePassed = 0;
   let timeLeft = TIME_LIMIT;
-  chrome.action.setBadgeText({ text: `${1500 / 60}` });
-
   let buttonValue = "Start";
 
-  // const timerInterval = setInterval(() => {
-  //   timePassed += 1;
-  //   timeLeft -= timePassed;
-  // }, 1000);
+  // interval function
+  let clear;
 
-  // if (timeLeft === 0) {
-  //   clearInterval(timerInterval);
-  //   timeLeft = TIME_LIMIT;
-  //   timePassed = 0;
+  clearInterval(clear);
+  clear = setInterval(() => {
+    if (timerStarted) {
+      timePassed += 1;
+      timeLeft = TIME_LIMIT - timePassed;
+      chrome.action.setBadgeText({ text: formatTimeLeft(timeLeft) });
 
-  //   // call completed function here
-  // }
+      if (timeLeft === 0) {
+        // call completed function here
+        timerComplete();
+      }
+    }
+  }, 1000);
+
+  function timerComplete() {
+    // reset state
+    timerStarted = false;
+    timeLeft = TIME_LIMIT;
+    timePassed = 0;
+    buttonValue = "Start";
+    chrome.action.setBadgeText({ text: "Start" });
+  }
 </script>
 
 <svelte:head>
@@ -43,7 +54,7 @@
       <button
         on:click={() => {
           timerStarted = !timerStarted;
-          buttonValue = timerStarted ? "Stop" : "Start";
+          buttonValue = timerStarted ? "Pause" : "Start";
         }}
       >
         {buttonValue}
