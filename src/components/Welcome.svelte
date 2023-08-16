@@ -16,7 +16,6 @@
     if (timerStarted) {
       timePassed += 1;
       timeLeft = TIME_LIMIT - timePassed;
-      chrome.action.setBadgeText({ text: formatTimeLeft(timeLeft) });
 
       if (timeLeft === 0) {
         // call completed function here
@@ -31,7 +30,6 @@
     timeLeft = TIME_LIMIT;
     timePassed = 0;
     buttonValue = "Start";
-    chrome.action.setBadgeText({ text: "Start" });
   }
 </script>
 
