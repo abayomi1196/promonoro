@@ -16,6 +16,7 @@
     if (timerStarted) {
       timePassed += 1;
       timeLeft = TIME_LIMIT - timePassed;
+      chrome.runtime.sendMessage({ type: "UPDATED", value: formatTimeLeft(timeLeft) });
 
       if (timeLeft === 0) {
         // call completed function here
@@ -49,10 +50,18 @@
         {formatTimeLeft(timeLeft)}
       </h4>
 
+      <!-- svelte-ignore missing-declaration -->
       <button
         on:click={() => {
           timerStarted = !timerStarted;
           buttonValue = timerStarted ? "Pause" : "Start";
+
+          if (timerStarted) {
+            chrome.runtime.sendMessage({ type: "STARTED", value: formatTimeLeft(timeLeft) });
+          } else {
+            chrome.runtime.sendMessage(
+              { type: "STOPPED" });
+          }
         }}
       >
         {buttonValue}
